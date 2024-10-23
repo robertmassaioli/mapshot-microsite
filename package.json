@@ -1,0 +1,14 @@
+{
+  "name": "mapshot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "upload": "aws s3 sync ./root/ s3://factorio-maps.rmdir.app-factorio-maps-v2 --delete",
+    "download": "aws s3 sync s3://factorio-maps.rmdir.app-factorio-maps-v2 ./root/ --delete",
+    "copy-mapshots": "rsync -av --ignore-existing '/Users/rmassaioli/Library/Application Support/factorio/script-output/mapshot/' ./root/"
+  },
+  "devDependencies": {
+    "copyfiles": "^2.4.1"
+  }
+}
