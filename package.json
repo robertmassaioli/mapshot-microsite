@@ -5,12 +5,15 @@
   "license": "MIT",
   "scripts": {
     "gen-then-upload": "run-s generate upload",
-    "generate": "run-s copy-mapshots gen:index",
+    "generate": "run-s copy-mapshots gen:index gen:frontend",
     "mapshot-manager": "ts-node --project ./tsconfig.json src/index.ts",
-    "gen:index": "yarn mapshot-manager generate-index --root-dir='./root'",
-    "upload": "aws s3 sync ./root/ s3://factorio-maps.rmdir.app-factorio-maps-v2 --delete",
+    "gen:index": "yarn mapshot-manager generate-index --root-dir='./root/mapshot'",
+    "gen:frontend": "cd frontend && yarn build && cp -r build/* ../root/",
+    "upload": "run-s upload:s3 cloudfront-invalidate",
+    "upload:s3": "aws s3 sync ./root/ s3://factorio-maps.rmdir.app-factorio-maps-v2 --delete",
+    "cloudfront-invalidate": "aws cloudfront create-invalidation --distribution-id E236P2FNB7LD2V --paths '/*'",
     "download": "aws s3 sync s3://factorio-maps.rmdir.app-factorio-maps-v2 ./root/ --delete",
-    "copy-mapshots": "rsync -av --ignore-existing '/Users/rmassaioli/Library/Application Support/factorio/script-output/mapshot/' ./root/",
+    "copy-mapshots": "rsync -av --ignore-existing '/Users/rmassaioli/Library/Application Support/factorio/script-output/mapshot/' ./root/mapshot",
     "complete-refresh": "run-s download gen-then-upload"
   },
   "devDependencies": {
