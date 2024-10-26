@@ -10,6 +10,7 @@
     "gen:index": "yarn mapshot-manager generate-index --root-dir='./root/mapshot'",
     "gen:frontend": "cd frontend && yarn build && cp -r build/* ../root/",
     "upload": "run-s upload:s3 cloudfront-invalidate",
+    "upload:frontend": "run-s gen:frontend upload",
     "upload:s3": "aws s3 sync ./root/ s3://factorio-maps.rmdir.app-factorio-maps-v2 --delete",
     "cloudfront-invalidate": "aws cloudfront create-invalidation --distribution-id E236P2FNB7LD2V --paths '/*'",
     "download": "aws s3 sync s3://factorio-maps.rmdir.app-factorio-maps-v2 ./root/ --delete",
