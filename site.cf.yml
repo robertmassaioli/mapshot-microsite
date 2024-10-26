@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'CloudFormation template for hosting Mapshot-generated files in Sydney with custom domain and CloudFront'
+Description: 'CloudFormation template for hosting Mapshot-generated files in Sydney with custom domain and CloudFront using latest TLS and OAC'
 
 Parameters:
   HostedZoneId:
@@ -10,12 +10,18 @@ Parameters:
     Type: String
     Description: The domain name for the static website (e.g., example.com)
 
+  CertificateArn:
+    Type: String
+    Description: The ARN of the externally provided SSL/TLS certificate
+
 Resources:
   MapShotBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: !Ref DomainName
-      AccessControl: Private
+      BucketName: !Sub '${DomainName}-${AWS::StackName}'
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: error.html
@@ -25,6 +31,11 @@ Resources:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
               SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
 
   MapShotBucketPolicy:
     Type: 'AWS::S3::BucketPolicy'
@@ -33,7 +44,7 @@ Resources:
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
-          - Sid: AllowCloudFrontAccess
+          - Sid: AllowCloudFrontServicePrincipalReadOnly
             Effect: Allow
             Principal:
               Service: cloudfront.amazonaws.com
@@ -43,10 +54,20 @@ Resources:
               StringEquals:
                 AWS:SourceArn: !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${MapShotCloudFrontDistribution}'
 
+  MapShotOriginAccessControl:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: MapShotOAC
+        SigningBehavior: always
+        OriginAccessControlOriginType: s3
+        SigningProtocol: sigv4
+
   MapShotCloudFrontDistribution:
     Type: 'AWS::CloudFront::Distribution'
     Properties:
       DistributionConfig:
+        Comment: !Sub 'CloudFront distribution for bucket ${MapShotBucket}'
         DefaultCacheBehavior:
           ViewerProtocolPolicy: redirect-to-https
           TargetOriginId: S3Origin
@@ -59,21 +80,17 @@ Resources:
         Enabled: true
         HttpVersion: http2
         Origins:
-          - DomainName: !Gehttps://www.loom.com/share/b256d80ad31643ca9104df6135644d5btAtt MapShotBucket.RegionalDomainName
+          - DomainName: !GetAtt MapShotBucket.DomainName
             Id: S3Origin
             S3OriginConfig: {}
+            OriginAccessControlId: !Ref MapShotOriginAccessControl
         PriceClass: PriceClass_100
         Aliases:
           - !Ref DomainName
         ViewerCertificate:
-          AcmCertificateArn: !Ref Certificate
+          AcmCertificateArn: !Ref CertificateArn
           SslSupportMethod: sni-only
-
-  Certificate:
-    Type: AWS::CertificateManager::Certificate
-    Properties:
-      DomainName: !Ref DomainName
-      ValidationMethod: DNS
+          MinimumProtocolVersion: TLSv1.2_2021
 
   WebsiteDNSRecord:
     Type: AWS::Route53::RecordSet
@@ -92,3 +109,5 @@ Outputs:
   DomainName:
     Value: !Ref DomainName
     Description: Domain name for the static website
+
+# index.html not set on cloudfront distribution!
