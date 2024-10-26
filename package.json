@@ -4,12 +4,14 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "gen-then-upload": "run-s generate upload",
     "generate": "run-s copy-mapshots gen:index",
     "mapshot-manager": "ts-node --project ./tsconfig.json src/index.ts",
     "gen:index": "yarn mapshot-manager generate-index --root-dir='./root'",
     "upload": "aws s3 sync ./root/ s3://factorio-maps.rmdir.app-factorio-maps-v2 --delete",
     "download": "aws s3 sync s3://factorio-maps.rmdir.app-factorio-maps-v2 ./root/ --delete",
-    "copy-mapshots": "rsync -av --ignore-existing '/Users/rmassaioli/Library/Application Support/factorio/script-output/mapshot/' ./root/"
+    "copy-mapshots": "rsync -av --ignore-existing '/Users/rmassaioli/Library/Application Support/factorio/script-output/mapshot/' ./root/",
+    "complete-refresh": "run-s download gen-then-upload"
   },
   "devDependencies": {
     "@types/node": "^22.7.9",
