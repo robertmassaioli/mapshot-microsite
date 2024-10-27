@@ -33,10 +33,12 @@ export const SaveLoader: React.FC = () => {
    }
 
    return (
-      <Grid size={3}>
-         <Item>
-            {Object.keys(saves).map(saveDir => <MapshotSaveView key={saveDir} saveDir={saveDir} mapshots={saves[saveDir]} />)}
-         </Item>
-      </Grid>
+      <>
+         {Object.keys(saves).map(saveDir => (
+            <Grid key={saveDir} size={3}>
+               <Item><MapshotSaveView saveDir={saveDir} mapshots={saves[saveDir]} /></Item>
+            </Grid>
+         ))}
+      </>
    );
  }
