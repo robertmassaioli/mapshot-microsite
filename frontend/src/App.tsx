@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { MapshotSave } from './data';
-import { SaveLoader } from './SaveLoader';
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './Header';
+import { SaveListing } from './SaveListing';
 
 const theme = createTheme({
   palette: {
@@ -18,12 +18,12 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Header />
-      <div className="App">
-        <h1>Mapshot Map Directory</h1>
-        <p>Welcome to the mapshot directory, browse any save you like and see all of the generated maps for that save as it progresses over time.</p>
-        <SaveLoader />
-      </div>
+      <Router>
+        <Header />
+        <Routes>
+          <Route path="/" element={<SaveListing key="save-listing" />} />
+        </Routes>
+      </Router>
     </ThemeProvider>
   );
 }

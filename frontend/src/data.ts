@@ -1,9 +1,5 @@
-export type MapshotSaves = {
-  [saveName: string]: Array<MapshotSave>;
-};
+import { MapshotMapData } from "./mapshot";
 
-export type MapshotSave = {
-  savename: string;
-  unique_id: string;
-  ticks_played: number;
+export type MapshotSaves = {
+  [saveName: string]: Array<MapshotMapData>;
 };

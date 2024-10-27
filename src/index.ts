@@ -1,15 +1,10 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { Command } from 'commander';
+import { MapshotMapData } from './mapshot';
 
-interface MapshotData {
-    savename: string;
-    unique_id: string;
-    ticks_played: number;
-}
-
-function traverseDirectory(rootDir: string): Record<string, MapshotData[]> {
-    const saveData: Record<string, MapshotData[]> = {};
+function traverseDirectory(rootDir: string): Record<string, MapshotMapData[]> {
+    const saveData: Record<string, MapshotMapData[]> = {};
 
     const saveDirs = fs.readdirSync(rootDir).filter(dir => {
         return fs.statSync(path.join(rootDir, dir)).isDirectory();
@@ -24,15 +19,11 @@ function traverseDirectory(rootDir: string): Record<string, MapshotData[]> {
         for (const mapshotDir of mapshotDirs) {
             const mapshotPath = path.join(savePath, mapshotDir, 'mapshot.json');
             if (fs.existsSync(mapshotPath)) {
-                const mapshotData: MapshotData = JSON.parse(fs.readFileSync(mapshotPath, 'utf8'));
+                const mapshotData: MapshotMapData = JSON.parse(fs.readFileSync(mapshotPath, 'utf8'));
                 if (!saveData[saveDir]) {
                     saveData[saveDir] = [];
                 }
-                saveData[saveDir].push({
-                    savename: mapshotData.savename,
-                    unique_id: mapshotData.unique_id,
-                    ticks_played: mapshotData.ticks_played
-                });
+                saveData[saveDir].push(mapshotData);
             }
         }
     }

@@ -1,6 +1,20 @@
 import React, { useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { MapshotSaveView } from './MapshotSaveView';
 import { MapshotSaves } from './data';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid2';
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+  ...theme.applyStyles('dark', {
+    backgroundColor: '#1A2027',
+  }),
+}));
 
 export const SaveLoader: React.FC = () => {
    const [saves, setSaves] = useState<MapshotSaves | undefined>(undefined);
@@ -19,8 +33,10 @@ export const SaveLoader: React.FC = () => {
    }
 
    return (
-     <div>
-       {Object.keys(saves).map(saveName => <MapshotSaveView key={saveName} saveName={saveName} mapshots={saves[saveName]} />)}
-     </div>
+      <Grid size={3}>
+         <Item>
+            {Object.keys(saves).map(saveDir => <MapshotSaveView key={saveDir} saveDir={saveDir} mapshots={saves[saveDir]} />)}
+         </Item>
+      </Grid>
    );
  }
