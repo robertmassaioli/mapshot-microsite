@@ -15,7 +15,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import pluralize from 'pluralize';
 import { Link } from "react-router-dom";
-import { appMapViewLocation, ticksToTime, toMapLocation } from "./util";
+import { appMapViewLocation, ticksToTime, toMapLocation, toMapThumbnail } from "./util";
 
 interface ExpandMoreProps extends IconButtonProps {
    expand: boolean;
@@ -65,7 +65,8 @@ export type MapshotSaveCardProps = {
       );
    }
 
-   const playerCount = props.mapshots[0].surfaces[0].players.length;
+   const newestMapshot = orderedMapshots[0];
+   const playerCount = newestMapshot.surfaces[0].players.length;
 
    return (
       <Card>
@@ -73,13 +74,19 @@ export type MapshotSaveCardProps = {
             title={props.saveDir}
             subheader={`${playerCount} ${pluralize("players", playerCount)}`}
          />
+         <CardMedia
+            component="img"
+            height="194"
+            image={toMapThumbnail(props.saveDir, newestMapshot.unique_id)}
+            alt="Paella dish"
+         />
          <CardContent>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             Saves: {props.mapshots.length}
             </Typography>
          </CardContent>
          <CardActions disableSpacing>
-            <IconButton aria-label="View latest map" href={appMapViewLocation(props.saveDir, props.mapshots[0].unique_id)}>
+            <IconButton aria-label="View latest map" href={appMapViewLocation(props.saveDir, newestMapshot.unique_id)}>
                <VisibilityIcon />
             </IconButton>
             <IconButton aria-label="share">
@@ -110,20 +117,5 @@ export type MapshotSaveCardProps = {
             </CardContent>
          </Collapse>
       </Card>
-   //   <section>
-   //     <div>
-   //       <h1>{props.saveName} - {props.mapshots.length} saves</h1>
-   //       <div>Thumbnail</div>
-   //     </div>
-   //     <div>
-   //       <ol>
-   //          {props.mapshots.map(mapshot => {
-   //             return (
-   //                <li><a href={`/mapshot/${props.saveName}/index.html?path=d-${mapshot.unique_id}`}>{ticksToTime(mapshot.ticks_played)}</a></li>
-   //             );
-   //          })}
-   //       </ol>
-   //     </div>
-   //   </section>
    );
  };

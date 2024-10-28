@@ -2,6 +2,10 @@ export function toMapLocation(saveDir: string, unique_id: string): string {
   return `/mapshot/${saveDir}/index.html?path=d-${unique_id}`;
 }
 
+export function toMapThumbnail(saveDir: string, unique_id: string): string {
+  return `/mapshot/${saveDir}/d-${unique_id}/s1zoom_3/tile_-1_-1.jpg`;
+}
+
 export function appMapViewLocation(saveDir: string, unique_id: string): string {
   return `/app/save/${saveDir}/mapshot/${unique_id}/`;
 }
