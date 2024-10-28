@@ -4,20 +4,39 @@ import Box from '@mui/material/Box';
 import styled from '@emotion/styled';
 
 import Grid from '@mui/material/Grid2';
+import { SaveLoadResult } from "./load-saves";
 
 const AppContainer = styled.div`
    padding-left: ${props => (props.theme as any).spacing(3)};
    padding-right: ${props => (props.theme as any).spacing(3)};
  `;
 
-export const SaveListing: React.FC = () => {
+export type SaveListingProps = {
+   saveLoadResult: SaveLoadResult;
+}
+
+export const SaveListing: React.FC<SaveListingProps> = ({saveLoadResult}) => {
+   if (saveLoadResult.type === 'in-progress') {
+      return (
+         <div>Loading saves...</div>
+      );
+   }
+
+   if (saveLoadResult.type === 'error') {
+      return (
+         <div>Failed to load the saves...</div>
+      );
+   }
+
+   const { saveData } = saveLoadResult;
+
    return (
       <AppContainer>
          <h1>Mapshot Map Directory</h1>
          <p>Welcome to the mapshot directory, browse any save you like and see all of the generated maps for that save as it progresses over time.</p>
          <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
-               <SaveLoader />
+               <SaveLoader saveData={saveData} />
             </Grid>
          </Box>
       </AppContainer>

@@ -15,6 +15,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import pluralize from 'pluralize';
 import { Link } from "react-router-dom";
+import { appMapViewLocation, ticksToTime, toMapLocation } from "./util";
 
 interface ExpandMoreProps extends IconButtonProps {
    expand: boolean;
@@ -44,32 +45,12 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
    ],
  }));
 
-export type MapshotSaveViewProps = {
+export type MapshotSaveCardProps = {
    saveDir: string;
    mapshots: Array<MapshotMapData>;
  };
 
-
- function toMapLocation(saveDir: string, unique_id: string): string {
-   return `/mapshot/${saveDir}/index.html?path=d-${unique_id}`;
- }
-
- function ticksToTime(ticks: number): string {
-   const ticksPerSecond = 60;
-   const secondsPerMinute = 60;
-   const minutesPerHour = 60;
-
-   const totalSeconds = Math.floor(ticks / ticksPerSecond);
-   const hours = Math.floor(totalSeconds / (secondsPerMinute * minutesPerHour));
-   const minutes = Math.floor((totalSeconds % (secondsPerMinute * minutesPerHour)) / secondsPerMinute);
-   const seconds = totalSeconds % secondsPerMinute;
-
-   const formatTime = (value: number): string => value.toString().padStart(2, '0');
-
-   return `${formatTime(hours)} hours ${formatTime(minutes)} minutes ${formatTime(seconds)} seconds`;
- }
-
- export const MapshotSaveView: React.FC<MapshotSaveViewProps> = (props) => {
+ export const MapshotSaveCard: React.FC<MapshotSaveCardProps> = (props) => {
    const [expanded, setExpanded] = React.useState(false);
 
    const handleExpandClick = () => {
@@ -98,7 +79,7 @@ export type MapshotSaveViewProps = {
             </Typography>
          </CardContent>
          <CardActions disableSpacing>
-            <IconButton aria-label="View latest map" href={toMapLocation(props.saveDir, props.mapshots[0].unique_id)}>
+            <IconButton aria-label="View latest map" href={appMapViewLocation(props.saveDir, props.mapshots[0].unique_id)}>
                <VisibilityIcon />
             </IconButton>
             <IconButton aria-label="share">
@@ -120,7 +101,7 @@ export type MapshotSaveViewProps = {
                   <ul>
                      {props.mapshots.map(mapshot => {
                         return (
-                           <li key={mapshot.unique_id}><a href={toMapLocation(props.saveDir, mapshot.unique_id)}>{ticksToTime(mapshot.ticks_played)}</a></li>
+                           <li key={mapshot.unique_id}><Link to={appMapViewLocation(props.saveDir, mapshot.unique_id)}>{ticksToTime(mapshot.ticks_played)}</Link></li>
                         );
                      })}
                   </ul>
