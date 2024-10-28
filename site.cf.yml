@@ -58,7 +58,7 @@ Resources:
     Type: AWS::CloudFront::OriginAccessControl
     Properties:
       OriginAccessControlConfig:
-        Name: MapShotOAC
+        Name: !Sub '${AWS::StackName}-MapShotOAC'
         SigningBehavior: always
         OriginAccessControlOriginType: s3
         SigningProtocol: sigv4
@@ -68,6 +68,7 @@ Resources:
     Properties:
       DistributionConfig:
         Comment: !Sub 'CloudFront distribution for bucket ${MapShotBucket}'
+        DefaultRootObject: index.html
         DefaultCacheBehavior:
           ViewerProtocolPolicy: redirect-to-https
           TargetOriginId: S3Origin
