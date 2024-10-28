@@ -13,7 +13,7 @@
     "upload": "run-s upload:s3 cloudfront-invalidate",
     "upload:frontend": "run-s gen:frontend upload",
     "upload:s3": "aws s3 sync ./root/ s3://factorio-maps.rmdir.app-factorio-maps-v2 --delete",
-    "cloudfront-invalidate": "aws cloudfront create-invalidation --distribution-id E236P2FNB7LD2V --paths '/*'",
+    "cloudfront-invalidate": "AWS_PAGER=cat aws cloudfront create-invalidation --distribution-id E236P2FNB7LD2V --paths '/*'",
     "download": "aws s3 sync s3://factorio-maps.rmdir.app-factorio-maps-v2 ./root/ --delete",
     "copy-mapshots": "rsync -avt --ignore-existing '/Users/rmassaioli/Library/Application Support/factorio/script-output/mapshot/' ./root/mapshot",
     "complete-refresh": "run-s download gen-then-upload"
