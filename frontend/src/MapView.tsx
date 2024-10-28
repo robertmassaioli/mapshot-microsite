@@ -34,7 +34,7 @@ export type MapViewProps = {
 };
 
 const MapViewContainer = styled.div`
-   height: calc(100vh - ${props => (props.theme as any).spacing(9)});
+   height: calc(100vh - ${props => (props.theme as any).spacing(16)});
 `;
 
 export type MapViewRouteProps = {
