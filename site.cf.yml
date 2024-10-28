@@ -78,6 +78,9 @@ Resources:
           ForwardedValues:
             QueryString: false
           CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+          FunctionAssociations:
+            - EventType: viewer-request
+              FunctionARN: !GetAtt SPACloudFrontFunction.FunctionARN
         Enabled: true
         HttpVersion: http2
         Origins:
@@ -92,6 +95,29 @@ Resources:
           AcmCertificateArn: !Ref CertificateArn
           SslSupportMethod: sni-only
           MinimumProtocolVersion: TLSv1.2_2021
+
+  SPACloudFrontFunction:
+    Type: AWS::CloudFront::Function
+    Properties:
+      Name: !Sub '${AWS::StackName}-spa-router'
+      AutoPublish: true
+      FunctionConfig:
+        Comment: 'Function to handle SPA routing for /app/ path'
+        Runtime: cloudfront-js-1.0
+      FunctionCode: |
+        function handler(event) {
+          var request = event.request;
+          var uri = request.uri;
+
+          // Check if the request uri starts with '/app/' or is exactly '/app'
+          if (uri.startsWith('/app/') || uri === '/app') {
+            // Rewrite to /index.html
+            request.uri = '/index.html';
+          }
+
+          // Return the modified or unmodified request
+          return request;
+        }
 
   WebsiteDNSRecord:
     Type: AWS::Route53::RecordSet
