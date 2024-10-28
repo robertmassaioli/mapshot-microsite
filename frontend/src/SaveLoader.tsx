@@ -28,7 +28,7 @@ export const SaveLoader: React.FC<SaveLoaderProps> = ({saveData}) => {
    return (
       <>
          {Object.keys(saveData).map(saveDir => (
-            <Grid key={saveDir} size={{ xs: 6, sm: 6, md: 4, lg: 3, xl: 2 }}>
+            <Grid key={saveDir} size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}>
                <Item><MapshotSaveCard saveDir={saveDir} mapshots={saveData[saveDir]} /></Item>
             </Grid>
          ))}

@@ -76,7 +76,7 @@ export type MapshotSaveCardProps = {
          />
          <CardMedia
             component="img"
-            height="194"
+
             image={toMapThumbnail(props.saveDir, newestMapshot.unique_id)}
             alt="Paella dish"
          />
