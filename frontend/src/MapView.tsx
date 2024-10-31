@@ -1,6 +1,5 @@
 import React from "react";
-import { MapshotMapData } from "./mapshot";
-import { appMapViewLocation, ticksToTime, toMapLocation } from "./util";
+import { appMapViewLocation, ticksToTime } from "./util";
 import { useParams } from "react-router-dom";
 import { isPresent } from "ts-is-present";
 import { SaveLoadResult } from "./load-saves";
@@ -9,25 +8,7 @@ import { FormControl } from "@mui/material";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from "react-router-dom";
-
-
-
-export type MapViewFrameProps = {
-   saveDir: string;
-   mapshot: MapshotMapData;
-};
-
-
-
-export const MapViewFrame: React.FC<MapViewFrameProps> = ({saveDir, mapshot}) => {
-   return (
-      <iframe
-         src={toMapLocation(saveDir, mapshot.unique_id)}
-         width={"100%"}
-         height={"100%"}
-      />
-   )
-}
+import { MapViewFrame } from "./MapViewIframe";
 
 export type MapViewProps = {
    saveLoadResult: SaveLoadResult;

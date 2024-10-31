@@ -1,15 +1,9 @@
 import React from "react";
 import { SaveLoader } from "./SaveLoader";
 import Box from '@mui/material/Box';
-import styled from '@emotion/styled';
-
 import Grid from '@mui/material/Grid2';
 import { SaveLoadResult } from "./load-saves";
-
-const AppContainer = styled.div`
-   padding-left: ${props => (props.theme as any).spacing(3)};
-   padding-right: ${props => (props.theme as any).spacing(3)};
- `;
+import { AppContainer } from "./AppContainer";
 
 export type SaveListingProps = {
    saveLoadResult: SaveLoadResult;

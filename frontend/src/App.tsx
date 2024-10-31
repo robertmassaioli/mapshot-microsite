@@ -11,6 +11,8 @@ import { useSaves } from './load-saves';
 
 import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
 import { LinkProps } from '@mui/material/Link';
+import { About } from './About';
+import { Contact } from './Contact';
 
 const LinkBehavior = React.forwardRef<
   HTMLAnchorElement,
@@ -50,6 +52,8 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<SaveListing key="save-listing" saveLoadResult={saveLoadResult} />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/app/save/:saveDir/mapshot/:uniqueId/" element={<MapView saveLoadResult={saveLoadResult} />} />
         </Routes>
       </Router>
