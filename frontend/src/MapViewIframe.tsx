@@ -27,9 +27,9 @@ export const MapViewFrame: React.FC<MapViewFrameProps> = ({saveDir, mapshot}) =>
       let currentUrl;
 
       const current = iframeRef.current;
-      if (iframeRef.current && iframeRef.current.contentWindow && iframeRef.current.contentWindow.location.href !== 'about:blank') {
+      if (current && current.contentWindow && current.contentWindow.location.href !== 'about:blank') {
         // Use the current iframe URL if it's available and not the initial about:blank
-        currentUrl = new URL(iframeRef.current.contentWindow.location.href);
+        currentUrl = new URL(current.contentWindow.location.href);
       } else {
         // Otherwise, use the baseUrl
         const generatedLocation = appendRelativeUrl(toMapLocation(saveDir, mapshot.unique_id));
