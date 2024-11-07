@@ -1,14 +1,22 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button, IconButton } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import { Link } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, Button } from '@mui/material';
+import { isPresent } from 'ts-is-present';
 
-const Header: React.FC = () => {
+export type HeaderProps = {
+   subDirectory?: string;
+}
+
+export const Header: React.FC<HeaderProps> = ({ subDirectory }) => {
+   let headerTitle = "Factorio Mapshot Maps";
+   if (isPresent(subDirectory)) {
+      headerTitle = `${subDirectory} - ${headerTitle}` ;
+   }
+
   return (
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Factorio Mapshot Maps
+          {headerTitle}
         </Typography>
         <Button color="inherit" href="/">Home</Button>
         <Button color="inherit" href="/about">About</Button>

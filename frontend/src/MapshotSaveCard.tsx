@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -16,6 +16,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import pluralize from 'pluralize';
 import { Link } from "react-router-dom";
 import { appMapViewLocation, ticksToTime, toMapLocation, toMapThumbnail } from "./util";
+import { HeaderContainer, HeaderContent } from "./SizeableHeader";
 
 interface ExpandMoreProps extends IconButtonProps {
    expand: boolean;
@@ -45,6 +46,14 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
    ],
  }));
 
+const HeaderTitle: React.FC<PropsWithChildren<{}>> = ({ children }) => {
+   return (
+      <HeaderContainer>
+         <HeaderContent>{children}</HeaderContent>
+      </HeaderContainer>
+   );
+}
+
 export type MapshotSaveCardProps = {
    saveDir: string;
    mapshots: Array<MapshotMapData>;
@@ -68,10 +77,13 @@ export type MapshotSaveCardProps = {
    const newestMapshot = orderedMapshots[0];
    const playerCount = newestMapshot.surfaces[0].players.length;
 
+
+
    return (
       <Card>
          <CardHeader
             title={props.saveDir}
+            titleTypographyProps={{ component: HeaderTitle }}
             subheader={`${playerCount} ${pluralize("players", playerCount)}`}
          />
          <CardMedia

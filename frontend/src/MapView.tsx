@@ -9,6 +9,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from "react-router-dom";
 import { MapViewFrame } from "./MapViewIframe";
+import Header from "./Header";
 
 export type MapViewProps = {
    saveLoadResult: SaveLoadResult;
@@ -67,22 +68,25 @@ export const MapView: React.FC<MapViewProps> = ({saveLoadResult}) => {
    }
 
    return (
-      <MapViewContainer>
-         <FormControl fullWidth>
-         <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            label="Age"
-            onChange={handleChange}
-            defaultValue={mapshot.unique_id}
-         >
-            {saveDirShots.sort((a, b) => b.ticks_played - a.ticks_played).map(m => (
-               <MenuItem value={m.unique_id}>{ticksToTime(m.ticks_played)}</MenuItem>
-            ))}
+      <>
+         <Header subDirectory={`Viewing save: ${saveDir}`} />
+         <MapViewContainer>
+            <FormControl fullWidth>
+            <Select
+               labelId="demo-simple-select-label"
+               id="demo-simple-select"
+               label="Age"
+               onChange={handleChange}
+               defaultValue={mapshot.unique_id}
+            >
+               {saveDirShots.sort((a, b) => b.ticks_played - a.ticks_played).map(m => (
+                  <MenuItem value={m.unique_id}>{ticksToTime(m.ticks_played)}</MenuItem>
+               ))}
 
-         </Select>
-         </FormControl>
-         <MapViewFrame saveDir={saveDir} mapshot={mapshot} />
-      </MapViewContainer>
+            </Select>
+            </FormControl>
+            <MapViewFrame saveDir={saveDir} mapshot={mapshot} />
+         </MapViewContainer>
+      </>
    );
 }
