@@ -15,7 +15,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import pluralize from 'pluralize';
 import { Link } from "react-router-dom";
-import { appMapViewLocation, ticksToTime, toMapLocation, toMapThumbnail } from "./util";
+import { appMapViewLocation, getPlayerTile, Position, ticksToTime, toMapLocation, toMapThumbnail } from "./util";
 import { HeaderContainer, HeaderContent } from "./SizeableHeader";
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -75,9 +75,15 @@ export type MapshotSaveCardProps = {
    }
 
    const newestMapshot = orderedMapshots[0];
-   const playerCount = newestMapshot.surfaces[0].players.length;
+   const firstSurface = newestMapshot.surfaces[0];
+   const playerCount = firstSurface.players.length;
 
+   let firstPlayerLoadedPosition: Position | undefined = firstSurface.players[0]?.position;
 
+   const firstPlayerPosition: Position = firstPlayerLoadedPosition || { x: 0, y: 0 };
+
+   const zoomLevel = 3;
+   const firstPlayerTile = getPlayerTile(firstPlayerPosition, zoomLevel, firstSurface.tile_size);
 
    return (
       <Card>
@@ -89,7 +95,7 @@ export type MapshotSaveCardProps = {
          <CardMedia
             component="img"
 
-            image={toMapThumbnail(props.saveDir, newestMapshot.unique_id)}
+            image={toMapThumbnail(props.saveDir, newestMapshot.unique_id, zoomLevel, firstPlayerTile)}
             alt="Paella dish"
          />
          <CardContent>
