@@ -1,9 +1,9 @@
-import React, { PropsWithChildren, useEffect, useState } from 'react';
+import React, { PropsWithChildren } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, redirect, Navigate } from 'react-router-dom';
 import Header, { HeaderProps } from './Header';
 import { SaveListing } from './SaveListing';
 import { MapView } from './MapView';
@@ -13,6 +13,7 @@ import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-d
 import { LinkProps } from '@mui/material/Link';
 import { About } from './About';
 import { Contact } from './Contact';
+import { RedirectToLatestMap } from './RedirectToLatestMap';
 
 const LinkBehavior = React.forwardRef<
   HTMLAnchorElement,
@@ -75,6 +76,7 @@ function App() {
             </PlainHeaderWrapper>
           )} />
           <Route path="/app/save/:saveDir/mapshot/:uniqueId/" element={<MapView saveLoadResult={saveLoadResult} />} />
+          <Route path="/app/save/:saveDir" element={<RedirectToLatestMap saveLoadResult={saveLoadResult} />} />
         </Routes>
       </Router>
     </ThemeProvider>

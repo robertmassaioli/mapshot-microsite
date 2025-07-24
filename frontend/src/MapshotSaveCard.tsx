@@ -15,7 +15,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import pluralize from 'pluralize';
 import { Link } from "react-router-dom";
-import { appMapViewLocation, getPlayerTile, Position, ticksToTime, toMapLocation, toMapThumbnail } from "./util";
+import { appLatestMapViewLocation, appMapViewLocation, getPlayerTile, Position, ticksToTime, toMapLocation, toMapThumbnail } from "./util";
 import { HeaderContainer, HeaderContent } from "./SizeableHeader";
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -107,7 +107,7 @@ export type MapshotSaveCardProps = {
             <IconButton aria-label="View latest map" href={appMapViewLocation(props.saveDir, newestMapshot.unique_id)}>
                <VisibilityIcon />
             </IconButton>
-            <IconButton aria-label="share">
+            <IconButton aria-label="share" href={appLatestMapViewLocation(props.saveDir)}>
                <ShareIcon />
             </IconButton>
             <ExpandMore

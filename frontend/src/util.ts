@@ -7,6 +7,10 @@ export function toMapThumbnail(saveDir: string, unique_id: string, zoomLevel: nu
   return `/mapshot/${saveDir}/d-${unique_id}/s1zoom_${zoomLevel}/tile_${tile.tile_x}_${tile.tile_y}.jpg`;
 }
 
+export function appLatestMapViewLocation(saveDir: string): string {
+  return `/app/save/${saveDir}/`;
+}
+
 export function appMapViewLocation(saveDir: string, unique_id: string): string {
   return `/app/save/${saveDir}/mapshot/${unique_id}/`;
 }
